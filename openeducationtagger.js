@@ -96,7 +96,7 @@ class OpenEducationTagger {
     const myOpenEducationTagger = this;
 
     // 2DO: uncomment
-    console.log('fetching url','https:' + this.oet_elasticsearch_hostname + '/' + this.oet_elasticsearch_index + '/_delete_by_query')
+    console.log('fetching url','https://' + this.oet_elasticsearch_hostname + '/' + this.oet_elasticsearch_index + '/_delete_by_query')
     fetch('https://' + this.oet_elasticsearch_hostname + '/' + this.oet_elasticsearch_index + '/_delete_by_query', options).then((response) => response.json())
       .then((data) => {
         console.log('Success:', data);
