@@ -181,13 +181,52 @@ class OpenEducationTagger {
 
     console.log('try to load gdrive spreadsheet');
 
-    fetch(this.spreadsheetJsonUrl).then(function(data) {
+    /*fetch(this.spreadsheetJsonUrl).then(response => {
+      return response.json().catch(err => {
+        console.error(`'${err}' happened, but no big deal!`);
+        return {};
+      });
+    }).then(data => {
+      console.log('DATA', data);
+    });
+
+    fetch(this.spreadsheetJsonUrl, {
+        mode: "no-cors",
+        method: "GET",
+        headers: {
+          "Accept": "application/json"
+        }
+      })
+      .then(response => response.json())
+      .then(response => {
+        return dispatch({
+          type: "GET_CALL",
+          response: response
+        });
+      })*/
+
+    console.log('try fetch');
+    fetch(this.spreadsheetJsonUrl, {
+        //mode: "no-cors",
+        method: "GET",
+        headers: {
+          "Accept": "application/json"
+        }
+      }).then(response => response.json()) // important to do it that way!, otherwise empty result
+      .then(json => {
+        console.log('parsed json', json); // access json.body here
+      }).catch(function(error) {
+        // If there is any error you will catch them here
+        console.log('error', error)
+      });
+
+    /*fetch(this.spreadsheetJsonUrl).then(function(data) {
       // Here you get the data to modify as you please
       console.log('data', data);
     }).catch(function(error) {
       // If there is any error you will catch them here
       console.log('error', error)
-    });
+    });*/
 
     /*https.get(this.spreadsheetJsonUrl, function(res) {
       var json = '';
