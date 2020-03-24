@@ -82,8 +82,6 @@ class OpenEducationTagger {
 
 
     let options = {
-      host: this.oet_elasticsearch_hostname,
-      path: '/' + this.oet_elasticsearch_index + '/_delete_by_query',
       method: 'POST',
       headers: headers,
       body: JSON.stringify({
