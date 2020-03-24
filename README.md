@@ -1,5 +1,7 @@
 
 
+Live: https://programmieraffe.github.io/openeducationtagger-html/
+
 See [https://github.com/programmieraffe/open-education-tagger] for all details
 
 Little tool to sync a Google Drive Spreadsheet to an elasticsearch instance, using Bulk-API to minimize API usage. This will save spreadsheet-ID for each entry, before syncing all entries with the given spreadsheet will be cleared/deleted.
