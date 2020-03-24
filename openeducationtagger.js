@@ -98,14 +98,16 @@ class OpenEducationTagger {
     const myOpenEducationTagger = this;
 
     // 2DO: uncomment
-    /*  fetch('https:'+this.oet_elasticsearch_hostname+'/'+this.oet_elasticsearch_index + '/_delete_by_query',options).then(response => function(reponse){
-        console.log('response',reponse);
-        // 2DO: if status == 200
-        // -> continue
+    fetch('https:' + this.oet_elasticsearch_hostname + '/' + this.oet_elasticsearch_index + '/_delete_by_query', options).then((response) => response.json())
+      .then((data) => {
+        console.log('Success:', data);
         this.syncSpreadsheetToClearedIndex();
-      });*/
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
 
-    this.syncSpreadsheetToClearedIndex();
+
 
     // 2DO: convert everything to fetch...
 
@@ -215,6 +217,9 @@ class OpenEducationTagger {
       }).then(response => response.json()) // important to do it that way!, otherwise empty result
       .then(json => {
         console.log('parsed json', json); // access json.body here
+
+        this.convertAndSubmitJsonToIndex(json);
+
       }).catch(function(error) {
         // If there is any error you will catch them here
         console.log('error', error)
@@ -260,9 +265,9 @@ class OpenEducationTagger {
   testBulkApi(sanitizedObjects) {
     console.log('test bulk api');
     // 2DO: good style to do it here this way?
-    const https = window.https;
+    //const https = window.https;
     // safer parsing
-    const tryjson = window.tryjson;
+    // const tryjson = window.tryjson;
 
     // configure authentication
     // 2DO: use stored values
@@ -278,51 +283,14 @@ class OpenEducationTagger {
 
 
     // bulk action
-    let options = {
+    /*let options = {
       host: this.oet_elasticsearch_hostname,
       path: '/' + this.oet_elasticsearch_index + '/_bulk',
       method: 'POST',
       headers: headers
-    };
-
-    const req = https.request(options, function(res) {
-      var jsonResponse = '';
-      console.log('send POST to index', res);
-      res.on('data', function(chunk) {
-        //console.log('data',chunk);
-        jsonResponse += chunk;
-      });
-
-      res.on('end', function() {
-        // 201 = created
-        if (res.statusCode === 200 || res.statusCode === 201) {
-          console.log('Status:', res.statusCode);
-          console.log('res', res);
-          var data = tryjson.parse(jsonResponse);
-          console.log('data parsed', data ? data : 'Error parsing JSON!');
-          // tryjson will return undefined on parsing error
-          if (data !== undefined) {
-            // new id will be _id: "kX9qDHEBtWjoDWKpNl2U",
-            console.log('got data successful', data);
-          }
-        } else {
-          console.log('Status:', res.statusCode);
-        }
-      });
-    }).on('error', function(err) {
-      console.log('Error:', err);
-    }); // eo https get
+    };*/
 
     let reqStringBulk = '';
-
-    // delete all spreadsheet entries
-    JSON.stringify({
-      "delete": {
-        "_index": "test",
-        "_id": "2"
-      }
-    });
-
     for (let i = 0; i < sanitizedObjects.length; i++) {
       reqStringBulk += JSON.stringify({
         "index": {}
@@ -330,13 +298,25 @@ class OpenEducationTagger {
       reqStringBulk += JSON.stringify(sanitizedObjects[i]) + "\n";
     }
 
-    req.write(reqStringBulk);
+    fetch('https://' + this.oet_elasticsearch_hostname + '/' + this.oet_elasticsearch_index + '/_bulk', {
+        //mode: "no-cors",
+        method: "POST",
+        headers: headers,
+        body: reqStringBulk
+        /*headers: {
+          "Accept": "application/json"
+        }*/
+      }).then(response => response.json()) // important to do it that way!, otherwise empty result
+      .then(json => {
+        console.log('json parsed', json);
+      });
+
 
     // this writes json data
     // this works!
     //req.write(JSON.stringify({ "index":{}})+"\n"+JSON.stringify({ "name":"john doe","age":25 })+"\n"+JSON.stringify({ "index":{} })+"\n"+JSON.stringify({ "name":"mary smith","age":32 })+"\n");
 
-    req.end();
+    //req.end();
 
   }
   convertAndSubmitJsonToIndex(spreadsheetJson) {
@@ -354,9 +334,9 @@ class OpenEducationTagger {
     { "index" : { "_index" : "test", "_id" : "1" } }
     { "field1" : "value1" }*/
 
-    const https = window.https;
+    //const https = window.https;
     // safer parsing
-    const tryjson = window.tryjson;
+    //const tryjson = window.tryjson;
 
     const sanitizedObjects = [];
 
