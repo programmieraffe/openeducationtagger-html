@@ -1,6 +1,7 @@
 'use strict';
 
 // this approach is needed because nodeIntegration = false
+
 // selected node APIs are exposed here (e.g. https), but not all
 // https://github.com/electron/electron/issues/8227
 
